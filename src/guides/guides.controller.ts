@@ -17,7 +17,7 @@ export class GuidesController {
     return this.guidesService.findAll();
   }
 
-  @Get(':userId')
+  @Get('user/:userId')
   async findAllByUser(@Param('userId') userId: string) {
     return this.guidesService.findAllByUser(+userId);
   }

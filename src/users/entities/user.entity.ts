@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Guide } from "src/guides/entities/guide.entity";
 
 @Entity()
 export class User {
@@ -19,6 +20,9 @@ export class User {
 
     @Column()
     isActive: boolean;
+
+    @OneToMany(() => Guide, guide => guide.user)
+    guides: Guide[];
 
     constructor(user: Partial<User>) {
         Object.assign(this, user);

@@ -1,6 +1,6 @@
-import { IsEmail, IsNotEmpty, IsString, Min, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, Min, MinLength } from "class-validator";
 
-export class CreateUserDto {
+export class LogUserDto {
     @IsEmail(
         {},
         {
@@ -14,9 +14,4 @@ export class CreateUserDto {
         message: 'Password must be at least 8 characters long',
     })
     password: string;
-    @IsString()
-    firstName: string;
-    @IsString()
-    lastName: string;
-    isActive: boolean;
 }

@@ -29,6 +29,9 @@ export class Guide {
     @OneToMany(() => Image, (image) => image.guide, { cascade: true })
     images: Image[];
 
+    @ManyToMany(() => User, user => user.favorites)
+    favorites: User[];
+
     constructor(guide: Partial<Guide>) {
         Object.assign(this, guide);
     }

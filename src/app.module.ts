@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { GuidesModule } from './guides/guides.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { GuidesModule } from './guides/guides.module';
     DatabaseModule,
     UsersModule,
     AuthModule,
-    GuidesModule
+    GuidesModule,
+    FavoritesModule
   ],
   controllers: [],
   providers: [],

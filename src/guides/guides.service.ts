@@ -37,7 +37,7 @@ export class GuidesService {
   }
 
   async findAllByUser(userId: number) {
-    return await this.guidesRepository.find({ where: { user: { id: userId } }, relations: ['user', 'images'] });
+    return await this.guidesRepository.find({ where: { user: { id: userId } }, relations: ['images'] });
   }
 
   async findOne(id: number) {

@@ -36,10 +36,11 @@ export class FavoritesService {
   }
 
   async findAll(userId: number) {
-    return await this.favoritesRepository.find({
+    const favorites = await this.favoritesRepository.find({
       where: { user: { id: userId } },
       relations: ['guide', 'guide.user'],
      });
+     return favorites.map(favorite => favorite.guide);
   }
 
   async findOne(id: number) {

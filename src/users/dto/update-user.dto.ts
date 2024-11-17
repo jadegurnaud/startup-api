@@ -6,5 +6,7 @@ export class UpdateUserDto {
     password: string;
     firstName: string;
     lastName: string;
+    pseudo: string;
+    dateOfBirth: Date;
     isActive: boolean;
 }

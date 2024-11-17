@@ -15,6 +15,12 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
+    console.log('createUserDto', createUserDto);
+    const founduser = await this.usersRepository.findOne({ where: { email: createUserDto.email } });
+    console.log('founduser', founduser);
+    if (founduser) {
+      throw new Error('Email already in use');
+    }
     const user = new User(createUserDto);
     await this.entityManager.save(user);
   }

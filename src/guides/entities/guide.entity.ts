@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { User } from "src/users/entities/user.entity";
-import { Image } from "src/images/entites/image.entity";
+import { User } from "../../users/entities/user.entity";
+import { Image } from "../../images/entites/image.entity";
 
 @Entity()
 export class Guide {
@@ -29,7 +29,7 @@ export class Guide {
     @OneToMany(() => Image, (image) => image.guide, { cascade: true })
     images: Image[];
 
-    @ManyToMany(() => User, user => user.favorites)
+    @ManyToMany(() => User, user => user.favorites, { cascade: true })
     favorites: User[];
 
     constructor(guide: Partial<Guide>) {

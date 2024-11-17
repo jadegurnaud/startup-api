@@ -5,10 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserPayload } from './jwt.strategy';
-import { UsersService } from 'src/users/users.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { create } from 'domain';
-import { LogUserDto } from 'src/users/dto/log-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { LogUserDto } from '../users/dto/log-user.dto';
 
 @Injectable()
 export class AuthService {

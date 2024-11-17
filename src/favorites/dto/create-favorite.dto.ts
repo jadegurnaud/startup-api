@@ -3,8 +3,8 @@ import { IsInt } from "class-validator";
 export class CreateFavoriteDto {
 
     @IsInt()
-    userId: number;
+    user: number;
 
     @IsInt()
-    guideId: number;
+    guide: number;
 }

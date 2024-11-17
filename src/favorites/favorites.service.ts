@@ -3,9 +3,9 @@ import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { UpdateFavoriteDto } from './dto/update-favorite.dto';
 import { Repository } from 'typeorm';
 import { Favorite } from './entities/favorite.entity';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Guide } from 'src/guides/entities/guide.entity';
+import { Guide } from '../guides/entities/guide.entity';
 
 @Injectable()
 export class FavoritesService {
@@ -19,19 +19,19 @@ export class FavoritesService {
   ) {}
   
   async create(createFavoriteDto: CreateFavoriteDto) {
-    const { userId, guideId } = createFavoriteDto;
+    const { user, guide } = createFavoriteDto;
     
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
-    if (!user) {
+    const foundUser = await this.usersRepository.findOne({ where: { id: user } });
+    if (!foundUser) {
       throw new Error('User not found');
     }
 
-    const guide = await this.guidesRepository.findOne({ where: { id: guideId } });
+    const foundGuide = await this.guidesRepository.findOne({ where: { id: guide } });
     if (!guide) {
       throw new Error('Guide not found');
     }
 
-    const favorite = new Favorite({ user, guide });
+    const favorite = new Favorite({ user: foundUser, guide: foundGuide });
     await this.favoritesRepository.save(favorite);
   }
 

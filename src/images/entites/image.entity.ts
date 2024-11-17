@@ -5,13 +5,12 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 export class Image {
 
     @PrimaryGeneratedColumn()
-
     id: number;
 
     @Column()
     url: string;
 
-    @ManyToOne(() => Guide, guide => guide.images)
+    @ManyToOne(() => Guide, guide => guide.images, { onDelete: 'CASCADE' })
     guide: Guide;
 
     constructor(image: Partial<Image>) {

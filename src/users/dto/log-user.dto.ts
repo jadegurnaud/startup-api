@@ -4,14 +4,23 @@ export class LogUserDto {
     @IsEmail(
         {},
         {
-            message: 'Invalid email',
+            message: 'email: L\'email doit être une adresse email valide',
+        },
+    )
+    @IsNotEmpty(
+        {
+            message: 'email: L\'email est obligatoire',
         },
     )
     email: string;
 
-    @IsNotEmpty()
+    @IsNotEmpty(
+        {
+            message: 'password: Le mot de passe est obligatoire',
+        },
+    )
     @MinLength(2, {
-        message: 'Password must be at least 8 characters long',
+        message: 'password: Le mot de passe doit contenir au moins 2 caractères',
     })
     password: string;
 }

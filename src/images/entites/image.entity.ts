@@ -10,6 +10,9 @@ export class Image {
     @Column()
     url: string;
 
+    @Column({ nullable: true })
+    cloudinaryPublicId: string;
+
     @ManyToOne(() => Guide, guide => guide.images, { onDelete: 'CASCADE' })
     guide: Guide;
 

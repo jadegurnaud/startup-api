@@ -15,9 +15,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    console.log('createUserDto', createUserDto);
     const founduser = await this.usersRepository.findOne({ where: { email: createUserDto.email } });
-    console.log('founduser', founduser);
     if (founduser) {
       throw new Error('Email already in use');
     }
@@ -26,11 +24,20 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.usersRepository.find();
+    const users = await this.usersRepository.find();
+    return users.map(user => {
+      const { password, ...result } = user;
+      return result;
+    });
   }
 
   async findOne(id: number) {
-    return await this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepository.findOneBy({ id });
+    if (user) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

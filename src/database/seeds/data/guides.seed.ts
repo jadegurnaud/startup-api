@@ -1,34 +1,51 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const guidesData = [
     {
         title: 'Guide to Paris',
         description: 'A complete guide to visiting Paris',
-        coverImage: 'paris-cover.jpg',
+        coverImage: undefined,
         images: [
-            'paris-1.jpg',
-            'paris-2.jpg',
-            'paris-3.jpg'
+            { 
+              url: 'image1.jpg', 
+              cloudinaryPublicId: `guides/${uuidv4()}` 
+            },
+            { 
+              url: 'image2.jpg', 
+              cloudinaryPublicId: `guides/${uuidv4()}` 
+            }
         ],
         user: 28
     },
     {
         title: 'London Adventures',
         description: 'Exploring the best of London',
-        coverImage: 'london-cover.jpg', 
+        coverImage: undefined, 
         images: [
-            'london-1.jpg',
-            'london-2.jpg',
-            'london-3.jpg'
+            { 
+              url: 'image1.jpg', 
+              cloudinaryPublicId: `guides/${uuidv4()}` 
+            },
+            { 
+              url: 'image2.jpg', 
+              cloudinaryPublicId: `guides/${uuidv4()}` 
+            }
         ],
         user: 29
     },
     {
         title: 'Tokyo Discovery',
         description: 'Ultimate Tokyo travel guide',
-        coverImage: 'tokyo-cover.jpg',
+        coverImage: undefined,
         images: [
-            'tokyo-1.jpg',
-            'tokyo-2.jpg',
-            'tokyo-3.jpg'
+            { 
+              url: 'image1.jpg', 
+              cloudinaryPublicId: `guides/${uuidv4()}` 
+            },
+            { 
+              url: 'image2.jpg', 
+              cloudinaryPublicId: `guides/${uuidv4()}` 
+            }
         ],
         user: 28
     },

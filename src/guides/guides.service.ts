@@ -6,6 +6,7 @@ import { Guide } from './entities/guide.entity';
 import { User } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Image } from '../images/entites/image.entity';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class GuidesService {
@@ -14,20 +15,28 @@ export class GuidesService {
     private readonly guidesRepository: Repository<Guide>,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    private readonly entityManager: EntityManager
+    private readonly entityManager: EntityManager,
+    private readonly imagesService: ImagesService
   ) {}
 
   async create(createGuideDto: CreateGuideDto) {
     const { title, description, user, coverImage, images } = createGuideDto;
-
+    
     const foundUser = await this.usersRepository.findOne({ where: { id: user } });
     if (!foundUser) {
       throw new Error('User not found');
     }
-    const guide = new Guide({ title, description, coverImage, user: foundUser });
 
-    if (images) {
-      guide.images = images.map(url => new Image({ url, guide }));
+    const guide = new Guide({ title, description, coverImage: coverImage.url, user: foundUser });
+
+    if (images && images.length > 0) {
+      guide.images = images.map(image =>
+        new Image({
+          url: image.url,
+          cloudinaryPublicId: image.cloudinaryPublicId,
+          guide
+        })
+      );
     }
     await this.entityManager.save(guide);
   }
@@ -54,6 +63,21 @@ export class GuidesService {
   }
 
   async remove(id: number) {
+    //supprimer les images de cloudinary
+    const guide = await this.findOne(id);
+    if (!guide) {
+      throw new Error('Guide not found');
+    }
+    if(guide.coverImage) {
+      let cloudinaryPublicId = guide.coverImage.split('/').slice(-1)[0];
+      cloudinaryPublicId = cloudinaryPublicId.split('.')[0];
+      cloudinaryPublicId = `guides/${cloudinaryPublicId}`;
+      await this.imagesService.deleteImage(cloudinaryPublicId);
+    }
+    if (!guide.images || guide.images.length === 0) {  
+      const cloudinaryPublicIds = guide.images.map(image => image.cloudinaryPublicId);
+      await this.imagesService.deleteImages(cloudinaryPublicIds);
+    }
     await this.guidesRepository.delete({ id });
   }
 }

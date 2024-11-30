@@ -6,7 +6,7 @@ import { Guide } from './entities/guide.entity';
 import { User } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Image } from '../images/entites/image.entity';
-import { ImagesService } from 'src/images/images.service';
+import { ImagesService } from '../images/images.service';
 
 @Injectable()
 export class GuidesService {

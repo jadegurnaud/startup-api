@@ -30,6 +30,8 @@ Les utilisateurs peuvent également consulter les guides de voyage créés par d
 
 - Docker pour la configuration de la bdd
 
+- Clouadinary utilisé comme cloud pour stocker les images des utilisateurs
+
 
 ## Configuration des variables d'environnement
 

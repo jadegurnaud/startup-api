@@ -15,16 +15,29 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
+    const founduser = await this.usersRepository.findOne({ where: { email: createUserDto.email } });
+    if (founduser) {
+      throw new Error('Email already in use');
+    }
     const user = new User(createUserDto);
     await this.entityManager.save(user);
   }
 
   async findAll() {
-    return await this.usersRepository.find();
+    const users = await this.usersRepository.find();
+    return users.map(user => {
+      const { password, ...result } = user;
+      return result;
+    });
   }
 
   async findOne(id: number) {
-    return this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepository.findOneBy({ id });
+    if (user) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

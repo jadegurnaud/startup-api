@@ -16,5 +16,14 @@ export const usersData = [
         pseudo: 'janesmith',
         dateOfBirth: new Date('1992-05-15'),
         isActive: true
-    }
+    },
+    {
+        email: 'test@example.com',
+        password: 'password789',  // sera hashé dans le seed.ts
+        firstName: 'Test',
+        lastName: 'User',
+        pseudo: 'testuser',
+        dateOfBirth: new Date('1995-12-25'),
+        isActive: true
+    },
 ];

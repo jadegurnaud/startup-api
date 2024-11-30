@@ -2,7 +2,7 @@ import { User } from "../../../users/entities/user.entity";
 import { DataSource } from "typeorm";
 import { usersData } from "../data/users.seed";
 import * as bcrypt from 'bcrypt';
-import { UsersService } from "src/users/users.service";
+import { UsersService } from "../../../users/users.service";
 
 export class UserSeeder {
     constructor(private readonly userService: UsersService) {}

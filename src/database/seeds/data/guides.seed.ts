@@ -4,49 +4,31 @@ export const guidesData = [
     {
         title: 'Guide to Paris',
         description: 'A complete guide to visiting Paris',
-        coverImage: undefined,
+        coverImage: '../data/images/test.jpg',
         images: [
-            { 
-              url: 'image1.jpg', 
-              cloudinaryPublicId: `guides/${uuidv4()}` 
-            },
-            { 
-              url: 'image2.jpg', 
-              cloudinaryPublicId: `guides/${uuidv4()}` 
-            }
+            '../data/images/test2.jpg',
+            '../data/images/test3.jpg'
         ],
-        user: 28
+        user: 1
     },
     {
         title: 'London Adventures',
         description: 'Exploring the best of London',
-        coverImage: undefined, 
+        coverImage: '../data/images/test2.jpg', 
         images: [
-            { 
-              url: 'image1.jpg', 
-              cloudinaryPublicId: `guides/${uuidv4()}` 
-            },
-            { 
-              url: 'image2.jpg', 
-              cloudinaryPublicId: `guides/${uuidv4()}` 
-            }
+            '../data/images/test3.jpg',
+            '../data/images/test.jpg'
         ],
-        user: 29
+        user: 2
     },
     {
         title: 'Tokyo Discovery',
         description: 'Ultimate Tokyo travel guide',
-        coverImage: undefined,
+        coverImage: '../data/images/test4.jpg',
         images: [
-            { 
-              url: 'image1.jpg', 
-              cloudinaryPublicId: `guides/${uuidv4()}` 
-            },
-            { 
-              url: 'image2.jpg', 
-              cloudinaryPublicId: `guides/${uuidv4()}` 
-            }
+            '../data/images/test.jpg',
+            '../data/images/test3.jpg'
         ],
-        user: 28
+        user: 1
     },
 ];

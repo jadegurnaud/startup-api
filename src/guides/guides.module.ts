@@ -4,7 +4,7 @@ import { GuidesController } from './guides.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Guide } from './entities/guide.entity';
 import { User } from '../users/entities/user.entity';
-import { ImagesModule } from 'src/images/images.module';
+import { ImagesModule } from '../images/images.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Guide]),

@@ -27,6 +27,7 @@ export class ImagesService {
                     },
                     (error, result) => {
                         if (error) {
+                            console.log(error);
                             reject(error);
                         }
                         resolve(result);

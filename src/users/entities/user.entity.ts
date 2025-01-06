@@ -27,6 +27,9 @@ export class User {
 
     @Column()
     isActive: boolean;
+    
+    @Column({ nullable: true })
+    refreshToken: string;
 
     @OneToMany(() => Guide, guide => guide.user)
     guides: Guide[];

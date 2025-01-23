@@ -2,6 +2,10 @@ import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, Pri
 import { User } from "../../users/entities/user.entity";
 import { Image } from "../../images/entites/image.entity";
 
+enum GuideType {
+    DRAFT = 'draft',
+    PUBLISHED = 'published',
+}
 @Entity()
 export class Guide {
 
@@ -16,6 +20,9 @@ export class Guide {
 
     @Column({ nullable: true })
     coverImage: string;
+
+    @Column({ nullable: true, type: 'enum', enum: GuideType, default: GuideType.DRAFT })
+    type: GuideType;
 
     @CreateDateColumn()
     createdAt: Date;

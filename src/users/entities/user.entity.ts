@@ -22,6 +22,15 @@ export class User {
     @Column()
     pseudo: string;
 
+    @Column({ nullable: true })
+    description: string;
+
+    @Column({ nullable: true })
+    coverImage: string;
+
+    @Column({ nullable: true })
+    profileImage: string;
+
     @Column()
     dateOfBirth: Date;
 

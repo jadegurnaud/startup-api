@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Image } from "../../images/entites/image.entity";
+import { Address } from "./adresse.entity";
 
 enum GuideType {
     DRAFT = 'draft',
@@ -29,6 +30,9 @@ export class Guide {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @ManyToOne(() => Address, { cascade: true, eager: true })
+    address: Address;
 
     @ManyToOne(() => User, user => user.guides)
     user: User;

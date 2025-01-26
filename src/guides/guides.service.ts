@@ -42,7 +42,7 @@ export class GuidesService {
   }
 
   async findAll() {
-    return await this.guidesRepository.find( { relations: ['user', 'images'] });
+    return await this.guidesRepository.find( { relations: ['user', 'images', 'address'] });
   }
 
   async findAllByUser(userId: number) {

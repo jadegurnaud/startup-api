@@ -25,6 +25,9 @@ export class Guide {
     @Column({ nullable: true, type: 'enum', enum: GuideType, default: GuideType.DRAFT })
     type: GuideType;
 
+    @Column({ default: 0 })
+    views: number;
+
     @CreateDateColumn()
     createdAt: Date;
 

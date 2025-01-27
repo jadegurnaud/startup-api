@@ -27,9 +27,29 @@ export class GuidesController {
     return this.guidesService.create({...createGuideDto, coverImage: uploadedCoverImage , images: uploadedImages});
   }
 
-  @Get()
+  /*@Get()
   async findAll() {
     return this.guidesService.findAll();
+  }*/
+
+  @Get('ajoutsRecents')
+  async findAjoutsRecents() {
+    return this.guidesService.findAjoutsRecents();
+  }
+
+  @Get('abonnements')
+  async findAbonnements() {
+    return this.guidesService.findAbonnements();
+  }
+
+  @Get('plusAimes')
+  async findPlusAimes() {
+    return this.guidesService.findPlusAimes();
+  }
+
+  @Get('plusConsultes')
+  async findPlusConsultes() {
+    return this.guidesService.findPlusConsultes();
   }
 
   @Get('user/:userId')

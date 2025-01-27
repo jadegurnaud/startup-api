@@ -53,6 +53,38 @@ export class GuidesService {
     return await this.guidesRepository.findOne({ where: { id } , relations: ['user', 'images'] });
   }
 
+  async findAjoutsRecents() {
+    return await this.guidesRepository.find({
+      order: { createdAt: 'DESC' },
+      take: 50,
+      relations: ['user', 'images', 'address'],
+    });
+  }
+
+  async findAbonnements() {
+    return await this.guidesRepository.find({
+      order: { createdAt: 'DESC' },
+      take: 50,
+      relations: ['user', 'images', 'address'],
+    });
+  }
+
+  async findPlusAimes() {
+    return await this.guidesRepository.find({
+      order: { createdAt: 'DESC' },
+      take: 50,
+      relations: ['user', 'images', 'address'],
+    });
+  }
+
+  async findPlusConsultes() {
+    return await this.guidesRepository.find({
+      order: { views: 'DESC' },
+      take: 50,
+      relations: ['user', 'images', 'address'],
+    });
+  }
+
   async update(id: number, updateGuideDto: UpdateGuideDto) {
     const guide = await this.guidesRepository.findOneBy({ id });
     if (!guide) {

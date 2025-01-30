@@ -5,9 +5,10 @@ import { GuidesService } from "../../../guides/guides.service";
 import { ImagesService } from "../../../images/images.service";
 import * as path from 'path';
 import * as fs from 'fs';
+import { AddressesService } from "../../../addresses/addresses.service";
 
 export class GuideSeeder {
-    constructor(private readonly guidesService : GuidesService, private readonly imagesService : ImagesService) {}
+    constructor(private readonly guidesService : GuidesService, private readonly imagesService : ImagesService, private readonly addressesService: AddressesService) {}
 
     async seed() {
         for (const guideData of guidesData) {
@@ -35,7 +36,10 @@ export class GuideSeeder {
                 );
             }
 
-            await this.guidesService.create({...guideData, coverImage: uploadedCoverImage ? uploadedCoverImage : null , images: uploadedImages});
+
+            
+
+            await this.guidesService.createDirectGuide({...guideData, coverImage: uploadedCoverImage ? uploadedCoverImage : null , images: uploadedImages, categories: guideData.categories});
         }
     }
 }

@@ -1,5 +1,7 @@
 import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { Transform } from "class-transformer";
+import { Transform, Type } from "class-transformer";
+import { CreateAddressDto } from "./create-address.dto";
+
 
 export class CreateGuideDto {
 
@@ -37,4 +39,41 @@ export class CreateGuideDto {
     @Transform(({ value }) => parseInt(value, 10))
     @IsInt()
     user: number;
+
+    @Transform(({ value }) => parseInt(value, 10))
+    @IsInt()
+    address: number;
+
+    @IsArray()
+    categories: number[];
+}
+
+export class CreateDirectGuideDto extends CreateGuideDto {
+    
+}
+
+export class CreateItineraryGuideDto extends CreateGuideDto {
+    @IsString()
+    startDate: string;
+
+    @IsString()
+    endDate: string;
+
+    @IsString()
+    startCity: string;
+
+    @IsString()
+    endCity: string;
+
+
+    @IsArray()
+    days: CreateDayDto[];
+}
+
+export class CreateDayDto {
+    @IsString()
+    date: string;
+
+    @IsString()
+    description: string;
 }

@@ -5,12 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Guide } from './entities/guide.entity';
 import { User } from '../users/entities/user.entity';
 import { ImagesModule } from '../images/images.module';
-import { Address } from './entities/adresse.entity';
+import { Address } from '../addresses/entities/address.entity';
+import { Category } from '../categories/entities/category.entity';
+import { DirectGuide } from './entities/direct-guide.entity';
+import { ItineraryGuide } from './entities/itinerary-guide.entity';
+import { Day } from './entities/day.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Guide]),
-  TypeOrmModule.forFeature([User]),
-  TypeOrmModule.forFeature([Address]),
+  TypeOrmModule.forFeature([User, Address, Category, DirectGuide, ItineraryGuide, Day]),
   ImagesModule
 ],
   controllers: [GuidesController],

@@ -1,14 +1,13 @@
-import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { JoinTable, Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, TableInheritance, OneToOne } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Image } from "../../images/entites/image.entity";
-import { Address } from "./adresse.entity";
+import { Address } from "../../addresses/entities/address.entity";
+import { Category } from "../../categories/entities/category.entity";
+import { GuideStatus, GuideType } from "../types/guide.types";
 
-enum GuideType {
-    DRAFT = 'draft',
-    PUBLISHED = 'published',
-}
 @Entity()
-export class Guide {
+@TableInheritance({ column: { type: "varchar", name: "guideType" } })
+export abstract class Guide {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -22,8 +21,16 @@ export class Guide {
     @Column({ nullable: true })
     coverImage: string;
 
-    @Column({ nullable: true, type: 'enum', enum: GuideType, default: GuideType.DRAFT })
-    type: GuideType;
+    @Column({ 
+        nullable: true, 
+        type: 'enum', 
+        enum: GuideStatus, 
+        default: GuideStatus.DRAFT 
+    })
+    status: GuideStatus;
+
+    @Column({ type: 'enum', enum: GuideType })
+    guideType: GuideType;
 
     @Column({ default: 0 })
     views: number;
@@ -45,6 +52,10 @@ export class Guide {
 
     @ManyToMany(() => User, user => user.favorites, { cascade: true })
     favorites: User[];
+
+    @ManyToMany(() => Category, category => category.guides, { cascade: true, eager: true })
+    @JoinTable()
+    categories: Category[];
 
     constructor(guide: Partial<Guide>) {
         Object.assign(this, guide);

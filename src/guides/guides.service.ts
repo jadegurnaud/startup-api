@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGuideDto, CreateDirectGuideDto } from './dto/create-guide.dto';
+import { CreateGuideDto, CreateDirectGuideDto, CreateItineraryGuideDto } from './dto/create-guide.dto';
 import { UpdateGuideDto } from './dto/update-guide.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { Guide } from './entities/guide.entity';
@@ -10,6 +10,10 @@ import { ImagesService } from '../images/images.service';
 import { DirectGuide } from './entities/direct-guide.entity';
 import { Address } from '../addresses/entities/address.entity';
 import { Category } from '../categories/entities/category.entity';
+import { ItineraryGuide } from './entities/itinerary-guide.entity';
+import { Day } from './entities/day.entity';
+import { Section } from './entities/section.entity';
+import { ContentBlock } from './entities/content-block.entity';
 
 @Injectable()
 export class GuidesService {
@@ -56,6 +60,69 @@ export class GuidesService {
         })
       );
     }
+    await this.entityManager.save(guide);
+  }
+
+  async createItineraryGuide(createGuideDto: CreateItineraryGuideDto) {
+    const { title, description, user, coverImage, images, address, categories, startDate, endDate, startCity, days } = createGuideDto;
+
+    const foundUser = await this.usersRepository.findOne({ where: { id: user } });
+    if (!foundUser) {
+      throw new Error('User not found');
+    }
+
+    const foundAddress = await this.addressesRepository.findOne({ where: { id: address } });
+    if (!foundAddress) {
+      throw new Error('Address not found');
+    }
+
+    const foundCategories = await this.entityManager.find(Category, {
+        where: categories.map(id => ({ id }))
+    });
+
+    if (foundCategories.length !== categories.length) {
+        throw new Error('Some categories were not found');
+    }
+
+    const guide = new ItineraryGuide({ title, description, coverImage: coverImage.url, user: foundUser, address: foundAddress, categories: foundCategories, startDate, endDate, startCity });
+
+    if (images && images.length > 0) {
+      guide.images = images.map(image =>
+        new Image({
+          url: image.url,
+          cloudinaryPublicId: image.cloudinaryPublicId,
+          guide
+        })
+      );
+    }
+
+    if (days && days.length > 0) {
+      guide.days = days.map(dayData => {
+        const day = new Day();
+        day.date = dayData.date;
+        day.description = dayData.description;
+        day.itineraryGuide = guide;
+
+        dayData.sections = dayData.sections.map(sectionData => {
+          const section = new Section();
+            section.sectionType = sectionData.sectionType;
+          section.title = sectionData.title;
+          section.description = sectionData.description;
+          section.day = day;
+
+          section.contentBlocks = sectionData.contentBlocks.map(content => {
+            const block = new ContentBlock();
+            block.contentType = content.contentType;
+            block.content = content.content;
+            block.section = section;
+            return block;
+          });
+          return section;
+        });
+        return day;
+      });
+    }
+
     await this.entityManager.save(guide);
   }
 

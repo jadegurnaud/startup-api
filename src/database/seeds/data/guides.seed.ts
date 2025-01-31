@@ -46,7 +46,7 @@ export const guidesData = [
         guideType: 'DIRECT'
     },
     {
-        title: 'Mon incroyable voyage de 5 jours au japon',
+        title: 'Mon incroyable voyage de 2 jours au japon',
         description: 'Un voyage inoubliable au Japon. Découvrez les meilleures destinations et activités à faire au Japon.',
         coverImage: '../data/images/test.jpg',
         images: [
@@ -58,36 +58,40 @@ export const guidesData = [
         categories: [1, 2, 3],
         status: 'PUBLISHED',
         guideType: 'ITINERARY',
-        startDate: '2025-01-02',
-        endDate: '2025-01-07',
         startCity: 'Tokyo',
-        endCity: 'Hiroshima',
+        endCity: 'Kyoto',
+        startDate: '2025-07-01',
+        endDate: '2025-07-02',
         days: [
             {
-                date: '2025-01-02',
-                description: 'Arrival in Tokyo',
+                date: '2025-07-01',
+                description: 'Arrivée à Tokyo. Découverte du quartier Shibuya et du temple Senso-ji.',
+                activities: [
+                    { type: 'visit', title: 'Temple Senso-ji', description: 'Visite d\'un des temples les plus anciens de Tokyo.' },
+                    { type: 'eat', title: 'Sushi à Tsukiji', description: 'Dîner avec des sushis frais au marché de Tsukiji.' }
+                ],
+                accommodation: [
+                    { type: 'hotel', name: 'Hotel Tokyo Plaza', address: 'Shibuya 1-1', description: 'Confort et proximité des attractions.' }
+                ],
+                transport: [
+                    { type: 'train', name: 'Shinkansen', description: 'Transport rapide vers Kyoto.' }
+                ]
             },
             {
-                date: '2025-01-03',
-                description: 'Exploring Tokyo',
+                date: '2025-07-02',
+                description: 'Exploration de Kyoto. Visite des temples Fushimi Inari et Kinkaku-ji.',
+                activities: [
+                    { type: 'visit', title: 'Temple Kinkaku-ji', description: 'Visite du temple doré.' },
+                    { type: 'eat', title: 'Ramen à Kyoto', description: 'Repas traditionnel de ramen dans un restaurant local.' }
+                ],
+                accommodation: [
+                    { type: 'hotel', name: 'Kyoto Hotel', address: 'Gion District', description: 'Séjour dans un hôtel traditionnel japonais.' }
+                ],
+                transport: [
+                    { type: 'bus', name: 'Kyoto City Bus', description: 'Utilisation du bus pour se déplacer à Kyoto.' }
+                ]
             },
-            {
-                date: '2025-01-04',
-                description: 'Day trip to Nikko',
-            },
-            {
-                date: '2025-01-05',
-                description: 'Travel to Kyoto',
-            },
-            {
-                date: '2025-01-06',
-                description: 'Exploring Kyoto',
-            },
-            {
-                date: '2025-01-07',
-                description: 'Travel to Hiroshima',
-            }
+            // Ajouter des jours supplémentaires ici
         ]
-        
     }
 ];

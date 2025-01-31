@@ -24,8 +24,7 @@ export abstract class Guide {
     @Column({ 
         nullable: true, 
         type: 'enum', 
-        enum: GuideStatus, 
-        default: GuideStatus.DRAFT 
+        enum: GuideStatus 
     })
     status: GuideStatus;
 

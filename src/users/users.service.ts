@@ -39,6 +39,14 @@ export class UsersService {
     return null;
   }
 
+  async findFollowers(id: number) {
+    const user = await this.usersRepository.findOne({ where: { id }, relations: ['followers'] });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user.followers.length;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.usersRepository.findOneBy({ id });
     if (!user) {

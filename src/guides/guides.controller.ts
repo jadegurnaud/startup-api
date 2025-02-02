@@ -63,12 +63,12 @@ export class GuidesController {
     return this.guidesService.findAjoutsRecents();
   }
 
-  @Get('abonnements')
+  @Get('abonnements/user/:userId')
   @ApiOperation({ summary: 'Get the guides followed by the user' })
   @ApiResponse({ status: 200, description: 'Guides found' })
   @ApiResponse({ status: 404, description: 'No guides found' })
-  async findAbonnements() {
-    return this.guidesService.findAbonnements();
+  async findAbonnements(@Param('userId') userId: string) {
+    return this.guidesService.findAbonnements(+userId);
   }
 
   @Get('plusAimes')
@@ -87,12 +87,36 @@ export class GuidesController {
     return this.guidesService.findPlusConsultes();
   }
 
+  @Patch('incrementConsultations/:id')
+  @ApiOperation({ summary: 'Increment the number of consultations of a guide' })
+  @ApiResponse({ status: 200, description: 'Consultations incremented' })
+  @ApiResponse({ status: 404, description: 'Guide not found' })
+  async incrementConsultations(@Param('id') id: string) {
+    return this.guidesService.incrementConsultations(+id);
+  }
+
   @Post('search')
   @ApiOperation({ summary: 'Search for guides' })
   @ApiResponse({ status: 200, description: 'Guides found' })
   @ApiResponse({ status: 404, description: 'No guides found' })
   async findRecherche(@Body() search: { type: string; country?: string; city?: string }) {
     return this.guidesService.findRecherche(search);
+  }
+
+  @Get('publies/user/:userId')
+  @ApiOperation({ summary: 'Get all guides from a user' })
+  @ApiResponse({ status: 200, description: 'Guides found' })
+  @ApiResponse({ status: 404, description: 'No guides found' })
+  async findGuidesPubliesByUser(@Param('userId') userId: string) {
+    return this.guidesService.findGuidesPubliesByUser(+userId);
+  }
+
+  @Get('brouillons/user/:userId')
+  @ApiOperation({ summary: 'Get all guides from a user' })
+  @ApiResponse({ status: 200, description: 'Guides found' })
+  @ApiResponse({ status: 404, description: 'No guides found' })
+  async findGuidesBrouillonsByUser(@Param('userId') userId: string) {
+    return this.guidesService.findGuidesBrouillonsByUser(+userId);
   }
 
   @Get('user/:userId')

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGuideDto, CreateDirectGuideDto, CreateItineraryGuideDto } from './dto/create-guide.dto';
 import { UpdateGuideDto } from './dto/update-guide.dto';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, Repository, In } from 'typeorm';
 import { Guide } from './entities/guide.entity';
 import { User } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +14,7 @@ import { ItineraryGuide } from './entities/itinerary-guide.entity';
 import { Day } from './entities/day.entity';
 import { Section } from './entities/section.entity';
 import { ContentBlock } from './entities/content-block.entity';
+import { GuideStatus } from './types/guide.types';
 
 @Injectable()
 export class GuidesService {
@@ -130,6 +131,14 @@ export class GuidesService {
     return await this.guidesRepository.find( { relations: ['user', 'images', 'address'] });
   }
 
+  async findGuidesPubliesByUser(userId: number) {
+    return await this.guidesRepository.find({ where: { user: { id: userId }, status: GuideStatus.PUBLISHED }, relations: ['images'] });
+  }
+
+  async findGuidesBrouillonsByUser(userId: number) {
+    return await this.guidesRepository.find({ where: { user: { id: userId }, status: GuideStatus.DRAFT }, relations: ['images'] });
+  }
+
   async findAllByUser(userId: number) {
     return await this.guidesRepository.find({ where: { user: { id: userId } }, relations: ['images'] });
   }
@@ -146,8 +155,20 @@ export class GuidesService {
     });
   }
 
-  async findAbonnements() {
+  async findAbonnements(userId: number) {
+    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['following'] });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    if (!user.following || !Array.isArray(user.following)) {
+      return []; // Retourne un tableau vide si aucun abonnement
+    }
+    const followingIds = user.following.map(followingUser => followingUser.id);
+
     return await this.guidesRepository.find({
+      where: { user: { id: In(followingIds) }, status: GuideStatus.PUBLISHED },
       order: { createdAt: 'DESC' },
       take: 50,
       relations: ['user', 'images', 'address'],
@@ -168,6 +189,10 @@ export class GuidesService {
       take: 50,
       relations: ['user', 'images', 'address'],
     });
+  }
+
+  async incrementConsultations(id: number) {
+    await this.guidesRepository.increment({ id }, 'views', 1);
   }
 
   async findRecherche(search: { type: string; country?: string; city?: string }) {

@@ -25,6 +25,14 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('followers/:id')
+  @ApiOperation({ summary: 'Get all followers of a user' })
+  @ApiResponse({ status: 200, description: 'Followers found' })
+  @ApiResponse({ status: 404, description: 'No followers found' })
+  async findFollowers(@Param('id') id: string) {
+    return this.usersService.findFollowers(+id);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get one user' })
   @ApiResponse({ status: 200, description: 'User found' })

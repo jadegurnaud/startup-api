@@ -7,6 +7,8 @@ import { GuidesModule } from './guides/guides.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { ImagesModule } from './images/images.module';
 import * as cloudinary from 'cloudinary';
+import { AddressesModule } from './addresses/addresses.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import * as cloudinary from 'cloudinary';
     GuidesModule,
     FavoritesModule,
     ImagesModule,
+    AddressesModule,
+    CategoriesModule
   ],
   controllers: [],
   providers: [

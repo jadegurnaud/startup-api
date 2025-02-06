@@ -5,7 +5,6 @@ import { EntityManager } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 @Injectable()
 export class UsersService {
   constructor(
@@ -38,6 +37,58 @@ export class UsersService {
       return result;
     }
     return null;
+  }
+
+  async findFollowers(id: number) {
+    const user = await this.usersRepository.findOne({ where: { id }, relations: ['followers'] });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user.followers.length;
+  }
+
+  async followUser(userId: number, followerId: number) {
+    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['following'] });
+    const follower = await this.usersRepository.findOne({ where: { id: followerId } });
+    
+    if (!user || !follower) {
+      throw new Error('User not found');
+    }
+
+    if (!user.following) {
+      user.following = [];
+    }
+    user.following.push(follower);
+    await this.entityManager.save(user);
+  }
+
+  async unfollowUser(userId: number, followerId: number) {
+    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['following'] });
+    const follower = await this.usersRepository.findOne({ where: { id: followerId } });
+    
+    if (!user || !follower) {
+      throw new Error('User not found');
+    }
+
+    if (!user.following) {
+      user.following = [];
+    }
+
+    user.following = user.following.filter(f => f.id !== followerId);
+    await this.entityManager.save(user);
+  }
+
+  async isFollowing(userId: number, followerId: number) {
+    const user = await this.usersRepository.findOne({ where: { id: userId }, relations: ['following'] });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    if (!user.following) {
+      return false;
+    }
+
+    return user.following.some(f => f.id === followerId);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

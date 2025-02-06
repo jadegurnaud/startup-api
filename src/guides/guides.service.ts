@@ -144,7 +144,27 @@ export class GuidesService {
   }
 
   async findOne(id: number) {
-    return await this.guidesRepository.findOne({ where: { id } , relations: ['user', 'images'] });
+    const guide = await this.guidesRepository.createQueryBuilder('guide')
+      .leftJoinAndSelect('guide.user', 'user')
+      .leftJoinAndSelect('guide.images', 'images')
+      .leftJoinAndSelect('guide.categories', 'categories')
+      .leftJoinAndSelect('guide.stays', 'stays')
+      .leftJoinAndSelect('stays.address', 'address')
+      .leftJoinAndSelect('stays.departingTransports', 'departingTransports')
+      .leftJoinAndSelect('stays.arrivingTransports', 'arrivingTransports')
+      .leftJoinAndSelect('stays.days', 'days')
+      .leftJoinAndSelect('days.sections', 'sections')
+      .where('guide.id = :id', { id })
+      .orderBy('stays.order', 'ASC')
+      .addOrderBy('days.date', 'ASC')
+      .addOrderBy('sections.order', 'ASC')
+      .getOne();
+
+    if (!guide) {
+      throw new Error('Guide not found');
+    }
+
+    return guide;
   }
 
   async findByCategory(categoryId: number) { 

@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ItineraryGuide } from "./itinerary-guide.entity";
 import { Section } from "./section.entity";
+import { Stay } from "./stay.entity";
 
 @Entity()
 export class Day {
@@ -16,8 +17,11 @@ export class Day {
     @ManyToOne(() => ItineraryGuide, itineraryGuide => itineraryGuide.days)
     itineraryGuide: ItineraryGuide;
 
-    @OneToMany(() => Section, (section) => section.day, { cascade: true })
+    @OneToMany(() => Section, (section) => section.day, { cascade: true, eager: true })
     sections: Section[];
+
+    @ManyToOne(() => Stay, stay => stay.days)
+    stay: Stay;
 
     
     

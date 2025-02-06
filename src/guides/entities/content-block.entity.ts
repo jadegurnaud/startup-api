@@ -14,4 +14,7 @@ export class ContentBlock {
 
     @ManyToOne(() => Section, (section) => section.contentBlocks, { onDelete: "CASCADE" })
     section: Section;
+
+    @Column({nullable: true})
+    order: number;
 }

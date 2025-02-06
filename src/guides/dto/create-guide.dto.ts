@@ -80,8 +80,8 @@ export class CreateContentBlockDto {
 }
 
 export class CreateSectionDto {
-    @IsEnum(["ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT"], { message: "sectionType: Doit être une des valeurs ['ACCOMMODATION', 'ACTIVITY', 'FOOD', 'TRANSPORT']" })
-    sectionType: "ACCOMMODATION" | "ACTIVITY" | "FOOD" | "TRANSPORT";
+    @IsEnum(["ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT", "LIBRE"], { message: "sectionType: Doit être une des valeurs ['ACCOMMODATION', 'ACTIVITY', 'FOOD', 'TRANSPORT']" })
+    sectionType: "ACCOMMODATION" | "ACTIVITY" | "FOOD" | "TRANSPORT" | "LIBRE";
 
     @IsString()
     title: string;

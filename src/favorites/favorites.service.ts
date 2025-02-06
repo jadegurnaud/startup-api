@@ -6,6 +6,7 @@ import { Favorite } from './entities/favorite.entity';
 import { User } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Guide } from '../guides/entities/guide.entity';
+import { GuideStatus } from 'src/guides/types/guide.types';
 
 @Injectable()
 export class FavoritesService {
@@ -40,7 +41,7 @@ export class FavoritesService {
       where: { user: { id: userId } },
       relations: ['guide', 'guide.user'],
      });
-     return favorites.map(favorite => favorite.guide);
+     return favorites.filter(favorite => favorite.guide.status === GuideStatus.PUBLISHED).map(favorite => favorite.guide);
   }
 
   async findOne(id: number) {

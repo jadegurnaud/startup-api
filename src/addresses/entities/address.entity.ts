@@ -11,7 +11,7 @@ export class Address {
   @Column('decimal', { precision: 10, scale: 6 })
   latitude: number;
 
-  @Column()
+  @Column({ nullable: true})
   address: string;
 
   @Column()

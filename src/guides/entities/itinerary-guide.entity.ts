@@ -2,6 +2,7 @@ import { ChildEntity, Column, Entity, OneToMany } from 'typeorm';
 import { Guide } from './guide.entity';
 import { Day } from './day.entity';
 import { GuideType } from '../types/guide.types';
+import { Stay } from './stay.entity';
 
 @ChildEntity(GuideType.ITINERARY)
 export class ItineraryGuide extends Guide {
@@ -19,6 +20,9 @@ export class ItineraryGuide extends Guide {
 
     @OneToMany(() => Day, day => day.itineraryGuide, { cascade: true })
     days: Day[];
+
+    @OneToMany(() => Stay, stay => stay.itineraryGuide, { cascade: true })
+    stays: Stay[];
 
     constructor(guide: Partial<ItineraryGuide>) {
         super(guide);

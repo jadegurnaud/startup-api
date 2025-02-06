@@ -12,10 +12,12 @@ import { ItineraryGuide } from './entities/itinerary-guide.entity';
 import { Day } from './entities/day.entity';
 import { Section } from './entities/section.entity';
 import { ContentBlock } from './entities/content-block.entity';
+import { Stay } from './entities/stay.entity';
+import { InterStayTransport } from './entities/interStayTransport.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Guide]),
-  TypeOrmModule.forFeature([User, Address, Category, DirectGuide, ItineraryGuide, Day, Section, ContentBlock]),
+  TypeOrmModule.forFeature([User, Address, Category, DirectGuide, ItineraryGuide, Day, Section, ContentBlock, Stay, InterStayTransport]),
   ImagesModule
 ],
   controllers: [GuidesController],

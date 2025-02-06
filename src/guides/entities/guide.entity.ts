@@ -56,6 +56,9 @@ export abstract class Guide {
     @JoinTable()
     categories: Category[];
 
+    @Column({ nullable: true})
+    price: number;
+
     constructor(guide: Partial<Guide>) {
         Object.assign(this, guide);
     }

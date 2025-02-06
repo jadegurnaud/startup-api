@@ -216,12 +216,13 @@ export class GuidesService {
     const queryBuilder = this.guidesRepository.createQueryBuilder('guide')
       .leftJoinAndSelect('guide.address', 'address')
       .leftJoinAndSelect('guide.user', 'user')
-      .leftJoinAndSelect('guide.images', 'images');
+      .leftJoinAndSelect('guide.images', 'images')
+      .where('guide.status = :status', { status: GuideStatus.PUBLISHED });
 
     if (search.type === 'country' && search.country) {
-      queryBuilder.where('address.country = :country', { country: search.country });
+      queryBuilder.andWhere('address.country = :country', { country: search.country });
     } else if (search.type === 'city' && search.city && search.country) {
-      queryBuilder.where('address.city = :city AND address.country = :country', { city: search.city, country: search.country });
+      queryBuilder.andWhere('address.city = :city AND address.country = :country', { city: search.city, country: search.country });
     } else {
       throw new Error('Invalid search parameters');
     }

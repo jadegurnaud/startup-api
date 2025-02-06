@@ -33,6 +33,30 @@ export class UsersController {
     return this.usersService.findFollowers(+id);
   }
 
+  @Post('followUser')
+  @ApiOperation({ summary: 'Follow a user' })
+  @ApiResponse({ status: 200, description: 'User followed' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  async followUser(@Body() { userId, followerId }) {
+    return this.usersService.followUser(+userId, +followerId);
+  }
+
+  @Post('unfollowUser')
+  @ApiOperation({ summary: 'Unfollow a user' })
+  @ApiResponse({ status: 200, description: 'User unfollowed' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  async unfollowUser(@Body() { userId, followerId }) {
+    return this.usersService.unfollowUser(+userId, +followerId);
+  }
+
+  @Get('checkIfFollowing/:userId/:followerId')
+  @ApiOperation({ summary: 'Check if a user is following another user' })
+  @ApiResponse({ status: 200, description: 'User found' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async isFollowing(@Param('userId') userId: string, @Param('followerId') followerId: string) {
+    return this.usersService.isFollowing(+userId, +followerId);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get one user' })
   @ApiResponse({ status: 200, description: 'User found' })

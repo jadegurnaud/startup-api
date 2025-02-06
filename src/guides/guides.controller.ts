@@ -71,6 +71,15 @@ export class GuidesController {
     return this.guidesService.findAbonnements(+userId);
   }
 
+
+  @Get('category/:categoryId')
+  @ApiOperation({ summary: 'Get the guides by the category' })
+  @ApiResponse({ status: 200, description: 'Guides found' })
+  @ApiResponse({ status: 404, description: 'No guides found' })
+  async findByCategory(@Param('categoryId') categoryId: string) {
+    return this.guidesService.findByCategory(+categoryId);
+  }
+
   @Get('plusAimes')
   @ApiOperation({ summary: 'Get the most liked guides' })
   @ApiResponse({ status: 200, description: 'Guides found' })

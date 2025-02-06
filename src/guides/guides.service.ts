@@ -147,8 +147,23 @@ export class GuidesService {
     return await this.guidesRepository.findOne({ where: { id } , relations: ['user', 'images'] });
   }
 
+  async findByCategory(categoryId: number) { 
+    return await this.guidesRepository
+      .createQueryBuilder('guide')
+      .leftJoinAndSelect('guide.categories', 'category') // Charge toutes les catégories
+      .leftJoinAndSelect('guide.user', 'user')
+      .leftJoinAndSelect('guide.images', 'images')
+      .leftJoinAndSelect('guide.address', 'address')
+      .where('guide.status = :status', { status: GuideStatus.PUBLISHED })
+      .andWhere('guide.id IN ' +
+        '(SELECT "guideId" FROM guide_categories_category WHERE "categoryId" = :categoryId)', 
+        { categoryId })
+      .getMany();
+  }
+
   async findAjoutsRecents() {
     return await this.guidesRepository.find({
+      where: { status: GuideStatus.PUBLISHED },
       order: { createdAt: 'DESC' },
       take: 50,
       relations: ['user', 'images', 'address'],
@@ -177,6 +192,7 @@ export class GuidesService {
 
   async findPlusAimes() {
     return await this.guidesRepository.find({
+      where: { status: GuideStatus.PUBLISHED },
       order: { createdAt: 'DESC' },
       take: 50,
       relations: ['user', 'images', 'address'],
@@ -185,6 +201,7 @@ export class GuidesService {
 
   async findPlusConsultes() {
     return await this.guidesRepository.find({
+      where: { status: GuideStatus.PUBLISHED },
       order: { views: 'DESC' },
       take: 50,
       relations: ['user', 'images', 'address'],
@@ -196,7 +213,6 @@ export class GuidesService {
   }
 
   async findRecherche(search: { type: string; country?: string; city?: string }) {
-    console.log(search);
     const queryBuilder = this.guidesRepository.createQueryBuilder('guide')
       .leftJoinAndSelect('guide.address', 'address')
       .leftJoinAndSelect('guide.user', 'user')
@@ -210,7 +226,6 @@ export class GuidesService {
       throw new Error('Invalid search parameters');
     }
     let res = await queryBuilder.getMany();
-    console.log(res);
     return res;
   }
 

@@ -21,5 +21,8 @@ export class CategoriesService {
        
       }
 
+    async findAll() {
+        return await this.categoriesRepository.find();
+    }
 
 }

@@ -32,17 +32,25 @@ export class CreateGuideDto {
     @IsOptional()
     coverImage?: { url: string, cloudinaryPublicId: string };
 
-    @IsArray()
+    @IsString()
+    status: "PUBLISHED" | "DRAFT"; 
+
+    @IsEnum(["DIRECT", "ITINERARY"], { message: "guideType: Doit être une des valeurs ['DIRECT', 'ITINERARY']" })
+    guideType: "DIRECT" | "ITINERARY";
+
+    @IsNotEmpty()
+    views: number;
+
     @IsOptional()
-    images?: Array<{ url: string, cloudinaryPublicId: string }>;
+    price: number;
     
     @Transform(({ value }) => parseInt(value, 10))
     @IsInt()
     user: number;
 
-    @Transform(({ value }) => parseInt(value, 10))
-    @IsInt()
-    address: number;
+    @Type(() => CreateAddressDto)
+    @IsNotEmpty()
+    address: CreateAddressDto;
 
     @IsArray()
     categories: number[];
@@ -53,12 +61,13 @@ export class CreateDirectGuideDto extends CreateGuideDto {
 }
 
 export class CreateItineraryGuideDto extends CreateGuideDto {
-    @IsDate()
+    
     @Type(() => Date)
+    @IsDate()
     startDate: Date;
 
-    @IsDate()
     @Type(() => Date)
+    @IsDate()
     endDate: Date;
 
     @IsString()
@@ -66,9 +75,16 @@ export class CreateItineraryGuideDto extends CreateGuideDto {
 
     @IsString()
     endCity: string;
-
+    
+    @Type(() => CreateDayDto)
     @IsArray()
+    @IsOptional()
     days: CreateDayDto[];
+    
+    @Type(() => CreateStayDto)
+    @IsArray()
+    @IsOptional()
+    stays: CreateStayDto[];
 }
 
 export class CreateContentBlockDto {
@@ -89,20 +105,79 @@ export class CreateSectionDto {
     @IsString()
     description: string;
 
+    @Type(() => CreateContentBlockDto)
     @IsArray()
     @IsOptional()
     contentBlocks?: CreateContentBlockDto[];
 }
 
 export class CreateDayDto {
-    @IsDate()
+    
     @Type(() => Date)
+    @IsDate()
     date: Date;
 
     @IsString()
     description: string;
 
+    @Type(() => CreateSectionDto)
     @IsArray()
     @IsOptional()
     sections?: CreateSectionDto[];
+}
+
+export class CreateStayDto {
+    
+    @Type(() => Date)
+    @IsDate()
+    startDate: Date;
+
+    @Type(() => Date)
+    @IsDate()
+    endDate: Date;
+
+    @IsString()
+    description: string;
+
+    @Type(() => CreateAddressDto)
+    @IsNotEmpty()
+    address: CreateAddressDto;
+
+    
+    @Transform(({ value }) => parseInt(value, 10))
+    @IsInt()
+    order: number;
+
+    @Type(() => CreateDayDto)
+    @IsArray()
+    @IsOptional()
+    days?: CreateDayDto[];
+
+    @Type(() => CreateInterStayTransportDto)
+    @IsArray()
+    @IsOptional()
+    departingTransports?: CreateInterStayTransportDto[];
+
+    @Type(() => CreateInterStayTransportDto)
+    @IsArray()
+    @IsOptional()
+    arrivingTransports?: CreateInterStayTransportDto[];
+}
+
+export class CreateInterStayTransportDto {
+    @IsInt()
+    fromStay: number;
+
+    @IsInt()
+    toStay: number;
+
+    @IsString()
+    description: string;
+
+    @IsEnum(["TRAIN", "BUS", "AVION", "VELO"], { message: "transportType: Doit être une des valeurs ['TRAIN', 'BUS', 'AVION', 'VELO']" })
+    transportType: "TRAIN" | "BUS" | "AVION" | "VELO";
+
+    @Transform(({ value }) => parseInt(value, 10))
+    @IsInt()
+    order: number;
 }

@@ -12,6 +12,7 @@ import { Address } from '../addresses/entities/address.entity';
 import { Category } from '../categories/entities/category.entity';
 import { ItineraryGuide } from './entities/itinerary-guide.entity';
 import { Day } from './entities/day.entity';
+import { Stay } from './entities/stay.entity';
 import { Section } from './entities/section.entity';
 import { ContentBlock } from './entities/content-block.entity';
 import { GuideStatus } from './types/guide.types';
@@ -30,17 +31,15 @@ export class GuidesService {
   ) {}
 
   async createDirectGuide(createGuideDto: CreateDirectGuideDto,) {
-    const { title, description, user, coverImage, images, address, categories } = createGuideDto;
-    
+    const { title, description, user, coverImage, address, categories } = createGuideDto;
+    console.log(createGuideDto);
     const foundUser = await this.usersRepository.findOne({ where: { id: user } });
     if (!foundUser) {
       throw new Error('User not found');
     }
 
-    const foundAddress = await this.addressesRepository.findOne({ where: { id: address } });
-    if (!foundAddress) {
-      throw new Error('Address not found');
-    }
+    const newAddress = this.addressesRepository.create(address);
+    const savedAddress = await this.addressesRepository.save(newAddress);
 
     const foundCategories = await this.entityManager.find(Category, {
         where: categories.map(id => ({ id }))
@@ -50,32 +49,21 @@ export class GuidesService {
         throw new Error('Some categories were not found');
     }
 
-    const guide = new DirectGuide({ title, description, coverImage: coverImage.url, user: foundUser, address: foundAddress, categories: foundCategories });
+    const guide = new DirectGuide({ title, description, coverImage: coverImage.url, user: foundUser, address: savedAddress, categories: foundCategories });
 
-    if (images && images.length > 0) {
-      guide.images = images.map(image =>
-        new Image({
-          url: image.url,
-          cloudinaryPublicId: image.cloudinaryPublicId,
-          guide
-        })
-      );
-    }
     await this.entityManager.save(guide);
   }
 
   async createItineraryGuide(createGuideDto: CreateItineraryGuideDto) {
-    const { title, description, user, coverImage, images, address, categories, startDate, endDate, startCity, days } = createGuideDto;
-
+    const { title, description, user, coverImage, address, categories, startDate, endDate, startCity, days, stays } = createGuideDto;
     const foundUser = await this.usersRepository.findOne({ where: { id: user } });
     if (!foundUser) {
       throw new Error('User not found');
     }
+    
+    const newAddress = this.addressesRepository.create(address);
+    const savedAddress = await this.addressesRepository.save(newAddress);
 
-    const foundAddress = await this.addressesRepository.findOne({ where: { id: address } });
-    if (!foundAddress) {
-      throw new Error('Address not found');
-    }
 
     const foundCategories = await this.entityManager.find(Category, {
         where: categories.map(id => ({ id }))
@@ -85,17 +73,9 @@ export class GuidesService {
         throw new Error('Some categories were not found');
     }
 
-    const guide = new ItineraryGuide({ title, description, coverImage: coverImage.url, user: foundUser, address: foundAddress, categories: foundCategories, startDate, endDate, startCity });
-
-    if (images && images.length > 0) {
-      guide.images = images.map(image =>
-        new Image({
-          url: image.url,
-          cloudinaryPublicId: image.cloudinaryPublicId,
-          guide
-        })
-      );
-    }
+    const guide = new ItineraryGuide({ title, description, coverImage: coverImage?.url, user: foundUser, address: savedAddress, categories: foundCategories, startDate, endDate, startCity });
+console.log(guide);
+   
 
     if (days && days.length > 0) {
       guide.days = days.map(dayData => {
@@ -123,7 +103,42 @@ export class GuidesService {
         return day;
       });
     }
+    if (stays && stays.length > 0) {
+      guide.stays = stays.map(stayData => {
+        const stay = new Stay();
+        stay.startDate = stayData.startDate;
+        stay.endDate = stayData.endDate;
+        stay.description = stayData.description;
+        stay.order = stayData.order;
+        stay.address = this.addressesRepository.create(stayData.address);
+        stay.days = stayData.days.map(dayData => {
+          const day = new Day();
+          day.date = dayData.date;
+          day.description = dayData.description;
+          day.itineraryGuide = guide;
 
+          day.sections = dayData.sections.map(sectionData => {
+            const section = new Section();
+            section.sectionType = sectionData.sectionType;
+            section.title = sectionData.title;
+            section.description = sectionData.description;
+            section.day = day;
+
+            section.contentBlocks = sectionData.contentBlocks.map(content => {
+              const block = new ContentBlock();
+              block.contentType = content.contentType;
+              block.content = content.content;
+              block.section = section;
+              return block;
+            });
+            return section;
+          });
+          return day;
+        });
+        return stay;
+      });
+    }
+    console.log(guide);
     await this.entityManager.save(guide);
   }
 

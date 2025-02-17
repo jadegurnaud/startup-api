@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsDecimal, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateAddressDto {
     @IsString(
@@ -24,5 +25,34 @@ export class CreateAddressDto {
         },
     )
     city: string;
+
+    @IsString(
+        {
+            message: 'address: L\'adresse doit être une chaîne de caractères',
+        },
+    )
+    @IsOptional()
+    address: string;
+
+    @IsNotEmpty(
+        {
+            message: 'longitude: La longitude est obligatoire',
+        },
+    )
+    @Transform(({ value }) => parseFloat(value))
+    @IsDecimal()
+    longitude: number;
+
+ 
+    @IsNotEmpty(
+        {
+            message: 'latitude: La latitude est obligatoire',
+        },
+    )
+    @Transform(({ value }) => parseFloat(value))
+    @IsDecimal()
+    latitude: number;
+
+
 
 }

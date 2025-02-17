@@ -11,7 +11,7 @@ export class GuideSeeder {
     constructor(private readonly guidesService : GuidesService, private readonly imagesService : ImagesService, private readonly addressesService: AddressesService) {}
 
     async seed() {
-        for (const guideData of guidesData) {
+       /* for (const guideData of guidesData) {
             let uploadedCoverImage: {url: string, cloudinaryPublicId: string} | null = null;
             if (guideData.coverImage) {
                 const coverImagePath = path.resolve(__dirname, guideData.coverImage);
@@ -36,10 +36,27 @@ export class GuideSeeder {
                 );
             }
 
+            const newAddress = await this.addressesService.create(guideData.address);
 
-            
+            if (guideData.guideType === 'DIRECT') {
+                await this.guidesService.createDirectGuide({
+                    ...guideData,
+                    coverImage: uploadedCoverImage ? uploadedCoverImage : null,
+                    images: uploadedImages,
+                    address: newAddress.id,
+                    categories: guideData.categories
+                });
+            } else if (guideData.guideType === 'ITINERARY') {
+                await this.guidesService.createItineraryGuide({
+                    ...guideData,
+                    coverImage: uploadedCoverImage ? uploadedCoverImage : null,
+                    images: uploadedImages,
+                    address: newAddress.id,
+                    categories: guideData.categories,
+                    days: guideData.days
+                });
+            }
 
-            await this.guidesService.createDirectGuide({...guideData, coverImage: uploadedCoverImage ? uploadedCoverImage : null , images: uploadedImages, categories: guideData.categories});
-        }
+            }*/
     }
 }

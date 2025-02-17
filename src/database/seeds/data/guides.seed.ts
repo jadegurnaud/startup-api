@@ -12,7 +12,13 @@ export const guidesData = [
             '../data/images/test3.jpg'
         ],
         user: 1,
-        address: 1,
+        address: {
+            longitude: 2.3522,
+            latitude: 48.8566,
+            country: 'France',
+            city: 'Paris',
+            address: 'Rue de Rivoli'
+        },
         categories: [1, 2],
         status: 'PUBLISHED',
         guideType: 'DIRECT'
@@ -26,7 +32,13 @@ export const guidesData = [
             '../data/images/test.jpg'
         ],
         user: 2,
-        address: 2,
+        address: {
+            longitude: -0.1276,
+            latitude: 51.5072,
+            country: 'United Kingdom',
+            city: 'London',
+            address: 'Buckingham Palace'
+        },
         categories: [2, 3],
         status: 'PUBLISHED',
         guideType: 'DIRECT'
@@ -40,7 +52,13 @@ export const guidesData = [
             '../data/images/test3.jpg'
         ],
         user: 1,
-        address: 3,
+        address: {
+            longitude: 139.6917,
+            latitude: 35.6895,
+            country: 'Japan',
+            city: 'Tokyo',
+            address: 'Shibuya Crossing'
+        },
         categories: [1, 3],
         status: 'PUBLISHED',
         guideType: 'DIRECT'

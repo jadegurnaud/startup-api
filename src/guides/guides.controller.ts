@@ -6,6 +6,7 @@ import { UpdateGuideDto } from './dto/update-guide.dto';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { url } from 'inspector';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
 
 @ApiTags('guides')
 @Controller('guides')
@@ -24,30 +25,25 @@ export class GuidesController {
     if (files.coverImage) {
       uploadedCoverImage = await this.imagesService.uploadImage(files.coverImage[0]);
     }
-    let uploadedImages: Array<{url: string, cloudinaryPublicId: string}> = [];
-    if (files.images && files.images.length > 0) {
-      uploadedImages = await Promise.all(files.images.map(image => this.imagesService.uploadImage(image)));
-    }
 
-    return this.guidesService.createDirectGuide({...createGuideDto, coverImage: uploadedCoverImage , images: uploadedImages});
+    return this.guidesService.createDirectGuide({...createGuideDto, coverImage: uploadedCoverImage});
   }
 
   @Post('itinerary')
   @ApiOperation({ summary: 'Create a guide' })
   @ApiResponse({ status: 201, description: 'Guide created' })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'coverImage', maxCount: 1 }, { name: 'images', maxCount: 8 }]))
-  async createItineraryGuide(@Body() createGuideDto: CreateItineraryGuideDto, @UploadedFiles() files: {coverImage: Express.Multer.File, images: Express.Multer.File[]}) {
-    let uploadedCoverImage: {url: string, cloudinaryPublicId: string} | null = null;
-    if (files.coverImage) {
-      uploadedCoverImage = await this.imagesService.uploadImage(files.coverImage[0]);
-    }
-    let uploadedImages: Array<{url: string, cloudinaryPublicId: string}> = [];
+  async createItineraryGuide(@Body() createGuideDto: CreateItineraryGuideDto) {
+   
+   
+    console.log(createGuideDto);
+    console.log("###################");
+    /*let uploadedImages: Array<{url: string, cloudinaryPublicId: string}> = [];
     if (files.images && files.images.length > 0) {
       uploadedImages = await Promise.all(files.images.map(image => this.imagesService.uploadImage(image)));
-    }
+    }*/
 
-    return this.guidesService.createItineraryGuide({...createGuideDto, coverImage: uploadedCoverImage , images: uploadedImages});
+    return this.guidesService.createItineraryGuide({...createGuideDto});
   }
 
   /*@Get()

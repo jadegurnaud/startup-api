@@ -31,7 +31,7 @@ export class CreateGuideDto {
     description: string;
 
     @IsOptional()
-    coverImage?: { url: string, cloudinaryPublicId: string };
+    coverImage?: {url: string, cloudinaryPublicId: string};
 
     @IsEnum(["published", "draft"], { message: "status: Doit être une des valeurs ['PUBLISHED', 'DRAFT']" })
     status: GuideStatus.DRAFT | GuideStatus.PUBLISHED; 
@@ -93,7 +93,7 @@ export class CreateItineraryGuideDto extends CreateGuideDto {
 }
 
 export class CreateContentBlockDto {
-    @IsEnum(["TEXT", "IMAGE", "LINK"], { message: "contentType: Doit être une des valeurs ['TEXT', 'IMAGE', 'LINK']" })
+    @IsString()
     contentType: "TEXT" | "IMAGE" | "LINK";
 
     @IsString()
@@ -101,7 +101,7 @@ export class CreateContentBlockDto {
 }
 
 export class CreateSectionDto {
-    @IsEnum(["ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT", "LIBRE"], { message: "sectionType: Doit être une des valeurs ['ACCOMMODATION', 'ACTIVITY', 'FOOD', 'TRANSPORT']" })
+    @IsString()
     sectionType: "ACCOMMODATION" | "ACTIVITY" | "FOOD" | "TRANSPORT" | "LIBRE";
 
     @IsString()

@@ -31,6 +31,9 @@ export abstract class Guide {
     @Column({ type: 'enum', enum: GuideType })
     guideType: GuideType;
 
+    @Column({ default: false })
+    isTravel: boolean;
+
     @Column({ default: 0 })
     views: number;
 

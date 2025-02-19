@@ -1,6 +1,7 @@
-import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString, IsEnum, IsDate } from "class-validator";
+import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString, IsEnum, IsDate, IsBoolean } from "class-validator";
 import { Transform, Type } from "class-transformer";
 import { CreateAddressDto } from "./create-address.dto";
+import { GuideStatus, GuideType } from "../types/guide.types";
 
 
 export class CreateGuideDto {
@@ -32,16 +33,20 @@ export class CreateGuideDto {
     @IsOptional()
     coverImage?: { url: string, cloudinaryPublicId: string };
 
-    @IsString()
-    status: "PUBLISHED" | "DRAFT"; 
+    @IsEnum(["published", "draft"], { message: "status: Doit être une des valeurs ['PUBLISHED', 'DRAFT']" })
+    status: GuideStatus.DRAFT | GuideStatus.PUBLISHED; 
 
-    @IsEnum(["DIRECT", "ITINERARY"], { message: "guideType: Doit être une des valeurs ['DIRECT', 'ITINERARY']" })
-    guideType: "DIRECT" | "ITINERARY";
+    @IsEnum(["direct", "itinerary"], { message: "guideType: Doit être une des valeurs ['DIRECT', 'ITINERARY']" })
+    guideType: GuideType.DIRECT | GuideType.ITINERARY;
+
+    @IsBoolean()
+    isTravel: boolean;
 
     @IsNotEmpty()
     views: number;
 
     @IsOptional()
+    @Transform(({ value }) => parseFloat(value))
     price: number;
     
     @Transform(({ value }) => parseInt(value, 10))

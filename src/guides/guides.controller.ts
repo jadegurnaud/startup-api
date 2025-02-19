@@ -124,6 +124,14 @@ export class GuidesController {
     return this.guidesService.findGuidesBrouillonsByUser(+userId);
   }
 
+  @Get('/travels/inProgress/user/:userId')
+  @ApiOperation({ summary: 'Get all travels from a user' })
+  @ApiResponse({ status: 200, description: 'Travels found' })
+  @ApiResponse({ status: 404, description: 'No travels found' })
+  async findTravelsByUser(@Param('userId') userId: string) {
+    return this.guidesService.findTravelsByUser(+userId);
+  }
+
   @Get('user/:userId')
   @ApiOperation({ summary: 'Get all guides from a user' })
   @ApiResponse({ status: 200, description: 'Guides found' })

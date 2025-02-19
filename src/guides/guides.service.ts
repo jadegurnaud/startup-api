@@ -31,7 +31,7 @@ export class GuidesService {
   ) {}
 
   async createDirectGuide(createGuideDto: CreateDirectGuideDto,) {
-    const { title, description, user, coverImage, address, categories } = createGuideDto;
+    const { title, description, user, coverImage, address, categories, price, views, status, isTravel } = createGuideDto;
     console.log(createGuideDto);
     const foundUser = await this.usersRepository.findOne({ where: { id: user } });
     if (!foundUser) {
@@ -49,13 +49,14 @@ export class GuidesService {
         throw new Error('Some categories were not found');
     }
 
-    const guide = new DirectGuide({ title, description, coverImage: coverImage.url, user: foundUser, address: savedAddress, categories: foundCategories });
+    const guide = new DirectGuide({ title, description, coverImage: coverImage?.url, user: foundUser, address: savedAddress, categories: foundCategories, price, views, status, isTravel });
 
     await this.entityManager.save(guide);
   }
 
   async createItineraryGuide(createGuideDto: CreateItineraryGuideDto) {
-    const { title, description, user, coverImage, address, categories, startDate, endDate, startCity, days, stays } = createGuideDto;
+    const { title, description, user, coverImage, address, categories, startDate, endDate, startCity, endCity, days, stays, price, views, status, isTravel } = createGuideDto;
+   console.log(createGuideDto);
     const foundUser = await this.usersRepository.findOne({ where: { id: user } });
     if (!foundUser) {
       throw new Error('User not found');
@@ -73,7 +74,7 @@ export class GuidesService {
         throw new Error('Some categories were not found');
     }
 
-    const guide = new ItineraryGuide({ title, description, coverImage: coverImage?.url, user: foundUser, address: savedAddress, categories: foundCategories, startDate, endDate, startCity });
+    const guide = new ItineraryGuide({ title, description, coverImage: coverImage?.url, user: foundUser, address: savedAddress, categories: foundCategories, startDate, endDate, startCity, endCity, price, views, status, isTravel });
 console.log(guide);
    
 
@@ -147,15 +148,19 @@ console.log(guide);
   }
 
   async findGuidesPubliesByUser(userId: number) {
-    return await this.guidesRepository.find({ where: { user: { id: userId }, status: GuideStatus.PUBLISHED }, relations: ['images'] });
+    return await this.guidesRepository.find({ where: { user: { id: userId }, status: GuideStatus.PUBLISHED, isTravel:false }, relations: ['images'] });
   }
 
   async findGuidesBrouillonsByUser(userId: number) {
-    return await this.guidesRepository.find({ where: { user: { id: userId }, status: GuideStatus.DRAFT }, relations: ['images'] });
+    return await this.guidesRepository.find({ where: { user: { id: userId }, status: GuideStatus.DRAFT, isTravel:false }, relations: ['images'] });
+  }
+
+  async findTravelsByUser(userId: number) {
+    return await this.guidesRepository.find({ where: { user: { id: userId }, status: GuideStatus.DRAFT, isTravel:true }, relations: ['images'] });
   }
 
   async findAllByUser(userId: number) {
-    return await this.guidesRepository.find({ where: { user: { id: userId } }, relations: ['images'] });
+    return await this.guidesRepository.find({ where: { user: { id: userId }, isTravel:false }, relations: ['images'] });
   }
 
   async findOne(id: number) {
@@ -190,6 +195,7 @@ console.log(guide);
       .leftJoinAndSelect('guide.images', 'images')
       .leftJoinAndSelect('guide.address', 'address')
       .where('guide.status = :status', { status: GuideStatus.PUBLISHED })
+      .andWhere('guide.isTravel = false')
       .andWhere('guide.id IN ' +
         '(SELECT "guideId" FROM guide_categories_category WHERE "categoryId" = :categoryId)', 
         { categoryId })
@@ -198,7 +204,7 @@ console.log(guide);
 
   async findAjoutsRecents() {
     return await this.guidesRepository.find({
-      where: { status: GuideStatus.PUBLISHED },
+      where: { status: GuideStatus.PUBLISHED, isTravel:false },
       order: { createdAt: 'DESC' },
       take: 50,
       relations: ['user', 'images', 'address'],
@@ -218,7 +224,7 @@ console.log(guide);
     const followingIds = user.following.map(followingUser => followingUser.id);
 
     return await this.guidesRepository.find({
-      where: { user: { id: In(followingIds) }, status: GuideStatus.PUBLISHED },
+      where: { user: { id: In(followingIds) }, status: GuideStatus.PUBLISHED, isTravel:false},
       order: { createdAt: 'DESC' },
       take: 50,
       relations: ['user', 'images', 'address'],
@@ -227,7 +233,7 @@ console.log(guide);
 
   async findPlusAimes() {
     return await this.guidesRepository.find({
-      where: { status: GuideStatus.PUBLISHED },
+      where: { status: GuideStatus.PUBLISHED, isTravel:false },
       order: { createdAt: 'DESC' },
       take: 50,
       relations: ['user', 'images', 'address'],
@@ -236,7 +242,7 @@ console.log(guide);
 
   async findPlusConsultes() {
     return await this.guidesRepository.find({
-      where: { status: GuideStatus.PUBLISHED },
+      where: { status: GuideStatus.PUBLISHED, isTravel:false },
       order: { views: 'DESC' },
       take: 50,
       relations: ['user', 'images', 'address'],
